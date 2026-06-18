@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -168,7 +169,20 @@
 
       <div class="grid-3">
         <div><label>Medida / Produto</label><input type="text" id="n-medida" placeholder="Ex: 20x30cm"></div>
+        <div><label>Material</label><input type="text" id="n-material" placeholder="Ex: Kraft, BOPP, Sedex"></div>
         <div><label>Valor da troca (R$)</label><input type="number" id="n-troca" placeholder="0,00" step="0.01" min="0"></div>
+      </div>
+
+      <div class="grid-3">
+        <div><label>Turno</label>
+          <select id="n-turno">
+            <option value="">Selecione</option>
+            <option>Manhã</option>
+            <option>Tarde</option>
+            <option>Noite</option>
+          </select>
+        </div>
+        <div><label>Data de fabricação</label><input type="date" id="n-fabricacao"></div>
         <div><label>Prioridade</label>
           <select id="n-prioridade"><option>Normal</option><option>Urgente</option></select>
         </div>
@@ -285,6 +299,9 @@ async function abrirTicket() {
     lote,
     quantidade: qtd,
     medida: document.getElementById('n-medida').value.trim(),
+    material: document.getElementById('n-material').value.trim(),
+    turno: document.getElementById('n-turno').value,
+    data_fabricacao: document.getElementById('n-fabricacao').value || null,
     valor_troca: custo,
     prejuizo: qtd * custo,
     descricao,
@@ -302,6 +319,9 @@ async function abrirTicket() {
   document.getElementById('n-lote').value = '';
   document.getElementById('n-qtd').value = '';
   document.getElementById('n-medida').value = '';
+  document.getElementById('n-material').value = '';
+  document.getElementById('n-turno').value = '';
+  document.getElementById('n-fabricacao').value = '';
   document.getElementById('n-troca').value = '';
   document.getElementById('n-descricao').value = '';
   document.getElementById('n-arquivos').value = '';
@@ -374,6 +394,9 @@ function renderLista(lista) {
           <div class="ticket-title">${t.cliente} — Lote ${t.lote}</div>
           <div class="ticket-meta">
             <span>📐 ${t.medida || '—'}</span>
+            <span>🧱 ${t.material || '—'}</span>
+            <span>🔄 Turno: ${t.turno || '—'}</span>
+            <span>🏭 Fab: ${t.data_fabricacao || '—'}</span>
             <span>📦 ${t.quantidade} un.</span>
             <span>💰 Prejuízo: ${prej}</span>
           </div>
