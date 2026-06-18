@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -45,7 +44,6 @@
   .btn-primary:hover { background: var(--brand-mid); }
   .btn-danger { background: var(--danger-light); color: var(--danger); border-color: #F7C1C1; }
   .btn-sm { padding: 6px 12px; font-size: 12px; }
-  /* UPLOAD */
   .upload-area { border: 2px dashed var(--border); border-radius: var(--radius-sm); padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.15s; background: var(--bg); }
   .upload-area:hover, .upload-area.drag { border-color: var(--brand); background: var(--brand-light); }
   .upload-area input { display: none; }
@@ -55,11 +53,8 @@
   .preview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 8px; margin-top: 10px; }
   .preview-item { position: relative; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); aspect-ratio: 1; background: var(--bg); }
   .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-  .preview-item .preview-video { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 28px; background: #1a1a2e; }
   .preview-item .remove-btn { position: absolute; top: 3px; right: 3px; background: rgba(0,0,0,0.6); color: #fff; border: none; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-  .upload-progress { height: 4px; background: var(--bg); border-radius: 2px; margin-top: 8px; overflow: hidden; display: none; }
-  .upload-progress-bar { height: 100%; background: var(--brand); border-radius: 2px; transition: width 0.3s; }
-  /* TICKETS */
+  .upload-info { font-size: 11px; color: var(--text-muted); margin-top: 6px; text-align: center; }
   .filters { display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap; }
   .filters select, .filters input { flex: 1; min-width: 140px; }
   .ticket { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
@@ -83,13 +78,10 @@
   .anexo-item { border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); aspect-ratio: 1; background: var(--bg); cursor: pointer; }
   .anexo-item img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.15s; }
   .anexo-item img:hover { opacity: 0.85; }
-  .anexo-video { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 24px; background: #1a1a2e; color: #fff; text-decoration: none; gap: 4px; }
-  .anexo-video span { font-size: 10px; opacity: 0.7; }
   .resp-box { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; margin-top: 0.5rem; }
   .resp-author { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
   .resp-form { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 1rem; margin-top: 0.5rem; }
   .btn-row { display: flex; gap: 8px; justify-content: flex-end; margin-top: 10px; }
-  /* RELATORIO */
   .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 1.5rem; }
   .metric { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; }
   .metric-label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
@@ -103,8 +95,7 @@
   .toast { position: fixed; bottom: 24px; right: 24px; background: var(--text); color: #fff; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; opacity: 0; pointer-events: none; transition: opacity 0.25s; z-index: 999; }
   .toast.show { opacity: 1; }
   .loading { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 13px; }
-  /* LIGHTBOX */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center; }
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; }
   .lightbox.open { display: flex; }
   .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: var(--radius-sm); }
   .lightbox-close { position: absolute; top: 20px; right: 24px; color: #fff; font-size: 28px; cursor: pointer; background: none; border: none; }
@@ -117,20 +108,16 @@
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo"><div class="logo-dot"></div> Ecompack — Controle de Devoluções</div>
   <span class="header-sub">Sistema interno de qualidade</span>
 </header>
-
 <nav>
   <button class="nav-btn active" onclick="goTab('novo', this)">+ Abrir ticket</button>
   <button class="nav-btn" onclick="goTab('tickets', this)">Tickets <span class="nav-count" id="nav-count">0</span></button>
   <button class="nav-btn" onclick="goTab('relatorio', this)">Relatório</button>
 </nav>
-
 <main>
-  <!-- NOVO TICKET -->
   <div id="panel-novo" class="panel active">
     <div class="card">
       <div class="card-title">Novo registro de devolução com defeito</div>
@@ -169,28 +156,24 @@
       </div>
       <div class="grid-1">
         <div>
-          <label>Fotos e vídeos do defeito</label>
+          <label>Fotos do defeito</label>
           <div class="upload-area" id="upload-area" onclick="document.getElementById('n-arquivos').click()"
             ondragover="event.preventDefault();this.classList.add('drag')"
             ondragleave="this.classList.remove('drag')"
             ondrop="handleDrop(event)">
-            <input type="file" id="n-arquivos" multiple accept="image/*,video/*" onchange="handleFiles(this.files)">
-            <div class="upload-icon">📎</div>
-            <div class="upload-text"><strong>Clique para anexar</strong> ou arraste aqui<br>Fotos e vídeos (JPG, PNG, MP4, MOV)</div>
+            <input type="file" id="n-arquivos" multiple accept="image/*" onchange="handleFiles(this.files)">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text"><strong>Clique para anexar fotos</strong> ou arraste aqui<br>JPG, PNG, WEBP</div>
           </div>
-          <div class="upload-progress" id="upload-progress">
-            <div class="upload-progress-bar" id="upload-progress-bar"></div>
-          </div>
+          <div class="upload-info" id="upload-info"></div>
           <div class="preview-grid" id="preview-grid"></div>
         </div>
       </div>
       <div style="display:flex;justify-content:flex-end;margin-top:8px">
-        <button class="btn btn-primary" onclick="abrirTicket()">✓ Registrar devolução</button>
+        <button class="btn btn-primary" id="btn-salvar" onclick="abrirTicket()">✓ Registrar devolução</button>
       </div>
     </div>
   </div>
-
-  <!-- TICKETS -->
   <div id="panel-tickets" class="panel">
     <div class="filters">
       <select id="f-status" onchange="carregarTickets()">
@@ -203,8 +186,6 @@
     </div>
     <div id="lista-tickets"><div class="loading">Carregando tickets...</div></div>
   </div>
-
-  <!-- RELATORIO -->
   <div id="panel-relatorio" class="panel">
     <div class="metrics" id="metrics"></div>
     <div class="card">
@@ -217,32 +198,26 @@
     </div>
   </div>
 </main>
-
 <div class="toast" id="toast"></div>
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-close">✕</button>
   <img id="lightbox-img" src="" alt="">
 </div>
-
 <script>
 const SUPA_URL = 'https://zbfjpyocdhndzlrboxb.supabase.co';
 const SUPA_KEY = 'sb_publishable_4plvC0EfMPMpfamA_Qrzvg_ddUciHhC';
 const { createClient } = supabase;
 const db = createClient(SUPA_URL, SUPA_KEY);
-
 let todosTickets = [];
 let arquivosSelecionados = [];
-
 document.getElementById('n-data').value = new Date().toISOString().slice(0,10);
-
 function toast(msg, tipo) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.style.background = tipo === 'erro' ? '#A32D2D' : '#1B3A6B';
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3000);
+  setTimeout(() => el.classList.remove('show'), 3500);
 }
-
 function goTab(tab, btn) {
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -251,65 +226,54 @@ function goTab(tab, btn) {
   if (tab === 'tickets') carregarTickets();
   if (tab === 'relatorio') renderRelatorio();
 }
-
 function handleDrop(e) {
   e.preventDefault();
   document.getElementById('upload-area').classList.remove('drag');
   handleFiles(e.dataTransfer.files);
 }
-
 function handleFiles(files) {
+  const MAX = 5, MAX_MB = 3;
   Array.from(files).forEach(file => {
-    if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) return;
-    arquivosSelecionados.push(file);
-    renderPreview();
+    if (!file.type.startsWith('image/')) { toast('Apenas imagens (JPG, PNG, WEBP)', 'erro'); return; }
+    if (file.size > MAX_MB * 1024 * 1024) { toast('Imagem muito grande (máx. 3MB)', 'erro'); return; }
+    if (arquivosSelecionados.length >= MAX) { toast('Máximo de 5 fotos por ticket.', 'erro'); return; }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_DIM = 1200;
+        let w = img.width, h = img.height;
+        if (w > MAX_DIM || h > MAX_DIM) {
+          if (w > h) { h = Math.round(h * MAX_DIM / w); w = MAX_DIM; }
+          else { w = Math.round(w * MAX_DIM / h); h = MAX_DIM; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        const base64 = canvas.toDataURL('image/jpeg', 0.75);
+        arquivosSelecionados.push({ nome: file.name, base64, tipo: 'imagem' });
+        renderPreview();
+        document.getElementById('upload-info').textContent = arquivosSelecionados.length + ' foto(s) selecionada(s)';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
   });
 }
-
 function renderPreview() {
-  const grid = document.getElementById('preview-grid');
-  grid.innerHTML = arquivosSelecionados.map((f, i) => {
-    if (f.type.startsWith('image/')) {
-      const url = URL.createObjectURL(f);
-      return `<div class="preview-item"><img src="${url}" alt="${f.name}"><button class="remove-btn" onclick="removeFile(${i})">✕</button></div>`;
-    } else {
-      return `<div class="preview-item"><div class="preview-video">🎬</div><button class="remove-btn" onclick="removeFile(${i})">✕</button></div>`;
-    }
-  }).join('');
+  document.getElementById('preview-grid').innerHTML = arquivosSelecionados.map((f, i) =>
+    `<div class="preview-item"><img src="${f.base64}" alt="${f.nome}"><button class="remove-btn" onclick="removeFile(${i})">✕</button></div>`
+  ).join('');
 }
-
 function removeFile(i) {
   arquivosSelecionados.splice(i, 1);
   renderPreview();
+  document.getElementById('upload-info').textContent = arquivosSelecionados.length ? arquivosSelecionados.length + ' foto(s) selecionada(s)' : '';
 }
-
-async function uploadArquivos(ticketId) {
-  if (!arquivosSelecionados.length) return [];
-  const progress = document.getElementById('upload-progress');
-  const bar = document.getElementById('upload-progress-bar');
-  progress.style.display = 'block';
-  const urls = [];
-  for (let i = 0; i < arquivosSelecionados.length; i++) {
-    const file = arquivosSelecionados[i];
-    const ext = file.name.split('.').pop();
-    const path = `${ticketId}/${Date.now()}_${i}.${ext}`;
-    const { data, error } = await db.storage.from('anexos').upload(path, file, { upsert: true });
-    if (!error) {
-      const { data: urlData } = db.storage.from('anexos').getPublicUrl(path);
-      urls.push({ url: urlData.publicUrl, tipo: file.type.startsWith('image/') ? 'imagem' : 'video', nome: file.name });
-    }
-    bar.style.width = `${Math.round(((i+1)/arquivosSelecionados.length)*100)}%`;
-  }
-  progress.style.display = 'none';
-  bar.style.width = '0%';
-  return urls;
-}
-
 async function gerarTicketId() {
   const { count } = await db.from('devolucoes').select('*', { count: 'exact', head: true });
   return 'DEV-' + String((count || 0) + 1).padStart(3, '0');
 }
-
 async function abrirTicket() {
   const cliente = document.getElementById('n-cliente').value.trim();
   const lote = document.getElementById('n-lote').value.trim();
@@ -317,10 +281,9 @@ async function abrirTicket() {
   const descricao = document.getElementById('n-descricao').value.trim();
   const custo = parseFloat(document.getElementById('n-troca').value) || 0;
   if (!cliente || !lote || !qtd || !descricao) { toast('Preencha cliente, lote, quantidade e descrição.', 'erro'); return; }
-  const btn = document.querySelector('#panel-novo .btn-primary');
+  const btn = document.getElementById('btn-salvar');
   btn.textContent = 'Salvando...'; btn.disabled = true;
   const ticket_id = await gerarTicketId();
-  const arquivos = await uploadArquivos(ticket_id);
   const { error } = await db.from('devolucoes').insert({
     ticket_id,
     aberto_por: document.getElementById('n-abertura').value,
@@ -330,12 +293,9 @@ async function abrirTicket() {
     material: document.getElementById('n-material').value.trim(),
     turno: document.getElementById('n-turno').value,
     data_fabricacao: document.getElementById('n-fabricacao').value || null,
-    valor_troca: custo,
-    prejuizo: qtd * custo,
-    descricao,
+    valor_troca: custo, prejuizo: qtd * custo, descricao,
     prioridade: document.getElementById('n-prioridade').value,
-    arquivos,
-    status: 'Aguardando gerente'
+    arquivos: arquivosSelecionados, status: 'Aguardando gerente'
   });
   btn.textContent = '✓ Registrar devolução'; btn.disabled = false;
   if (error) { toast('Erro ao salvar: ' + error.message, 'erro'); return; }
@@ -345,10 +305,10 @@ async function abrirTicket() {
   document.getElementById('n-data').value = new Date().toISOString().slice(0,10);
   arquivosSelecionados = [];
   document.getElementById('preview-grid').innerHTML = '';
+  document.getElementById('upload-info').textContent = '';
   document.getElementById('nav-count').textContent = parseInt(document.getElementById('nav-count').textContent || 0) + 1;
   toast(ticket_id + ' registrado com sucesso!');
 }
-
 async function carregarTickets() {
   document.getElementById('lista-tickets').innerHTML = '<div class="loading">Carregando...</div>';
   const filtroStatus = document.getElementById('f-status').value;
@@ -360,7 +320,6 @@ async function carregarTickets() {
   document.getElementById('nav-count').textContent = todosTickets.length;
   filtrarLista();
 }
-
 function filtrarLista() {
   const busca = document.getElementById('f-busca').value.toLowerCase();
   const filtrados = busca ? todosTickets.filter(t =>
@@ -368,7 +327,6 @@ function filtrarLista() {
   ) : todosTickets;
   renderLista(filtrados);
 }
-
 function renderLista(lista) {
   const el = document.getElementById('lista-tickets');
   if (!lista.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>Nenhum ticket encontrado.</div>'; return; }
@@ -376,123 +334,49 @@ function renderLista(lista) {
     const prej = t.prejuizo > 0 ? 'R$ ' + Number(t.prejuizo).toLocaleString('pt-BR', {minimumFractionDigits:2}) : '—';
     const badgeClass = t.prioridade === 'Urgente' ? 'b-urgente' : t.status === 'Aguardando gerente' ? 'b-aguardando' : t.status === 'Respondido' ? 'b-respondido' : 'b-encerrado';
     const badgeLabel = t.prioridade === 'Urgente' ? 'Urgente' : t.status;
-    const anexos = (t.arquivos || []);
+    const anexos = Array.isArray(t.arquivos) ? t.arquivos.filter(a => a && a.base64) : [];
     const anexosHtml = anexos.length
-      ? `<div class="anexos-grid">${anexos.map(a => a.tipo === 'imagem'
-          ? `<div class="anexo-item" onclick="openLightbox('${a.url}')"><img src="${a.url}" alt="${a.nome}" loading="lazy"></div>`
-          : `<div class="anexo-item"><a class="anexo-video" href="${a.url}" target="_blank">🎬<span>${a.nome}</span></a></div>`
-        ).join('')}</div>`
-      : '<span style="font-size:12px;color:var(--text-muted)">Sem anexos</span>';
-
+      ? `<div class="anexos-grid">${anexos.map(a => `<div class="anexo-item" onclick="openLightbox('${a.base64}')"><img src="${a.base64}" alt="${a.nome||''}" loading="lazy"></div>`).join('')}</div>`
+      : '<span style="font-size:12px;color:var(--text-muted)">Sem fotos</span>';
     const respostaHtml = t.resposta_gerente
-      ? `<div class="detail-section">
-          <div class="detail-label">✅ Resposta do gerente de produção</div>
-          <div class="resp-box">
-            <div class="resp-author">${t.responsavel_producao || '—'} · ${t.data_resposta || ''}</div>
-            <div class="detail-text">${t.resposta_gerente}</div>
-          </div>
-          ${t.status !== 'Encerrado' ? `<div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn btn-sm btn-danger" onclick="encerrar('${t.id}')">Encerrar ticket</button></div>` : ''}
-        </div>`
-      : `<div class="detail-section">
-          <div class="detail-label">Resposta do gerente de produção</div>
-          <div class="resp-form">
-            <div class="grid-2" style="margin-bottom:10px">
-              <div><label>Responsável pela produção</label><input type="text" id="rn-${t.id}" placeholder="Nome do operador / turno"></div>
-              <div><label>Data</label><input type="date" id="rd-${t.id}" value="${new Date().toISOString().slice(0,10)}"></div>
-            </div>
-            <textarea id="rt-${t.id}" placeholder="Informe quem produziu, a causa identificada e a ação corretiva tomada..."></textarea>
-            <div class="btn-row">
-              <button class="btn btn-sm btn-primary" onclick="responder('${t.id}')">Registrar resposta</button>
-              <button class="btn btn-sm btn-danger" onclick="encerrar('${t.id}')">Encerrar ticket</button>
-            </div>
-          </div>
-        </div>`;
-
-    return `<div class="ticket">
-      <div class="ticket-head" onclick="toggleTicket('tb-${t.id}')">
-        <div style="flex:1">
-          <div class="ticket-id">${t.ticket_id} · Aberto por ${t.aberto_por} em ${t.data_abertura}</div>
-          <div class="ticket-title">${t.cliente} — Lote ${t.lote}</div>
-          <div class="ticket-meta">
-            <span>📐 ${t.medida || '—'}</span>
-            <span>🧱 ${t.material || '—'}</span>
-            <span>🔄 ${t.turno || '—'}</span>
-            <span>🏭 Fab: ${t.data_fabricacao || '—'}</span>
-            <span>📦 ${t.quantidade} un.</span>
-            <span>💰 ${prej}</span>
-          </div>
-        </div>
-        <div class="ticket-right">
-          <span class="badge ${badgeClass}">${badgeLabel}</span>
-          <span style="font-size:11px;color:var(--text-muted)">ver detalhes ▾</span>
-        </div>
-      </div>
-      <div class="ticket-body" id="tb-${t.id}">
-        <div class="detail-section">
-          <div class="detail-label">Descrição do defeito</div>
-          <div class="detail-text">${t.descricao}</div>
-        </div>
-        <div class="detail-section">
-          <div class="detail-label">Fotos e vídeos (${anexos.length})</div>
-          ${anexosHtml}
-        </div>
-        ${respostaHtml}
-      </div>
-    </div>`;
+      ? `<div class="detail-section"><div class="detail-label">✅ Resposta do gerente de produção</div><div class="resp-box"><div class="resp-author">${t.responsavel_producao||'—'} · ${t.data_resposta||''}</div><div class="detail-text">${t.resposta_gerente}</div></div>${t.status!=='Encerrado'?`<div style="margin-top:8px;display:flex;justify-content:flex-end"><button class="btn btn-sm btn-danger" onclick="encerrar('${t.id}')">Encerrar ticket</button></div>`:''}</div>`
+      : `<div class="detail-section"><div class="detail-label">Resposta do gerente de produção</div><div class="resp-form"><div class="grid-2" style="margin-bottom:10px"><div><label>Responsável pela produção</label><input type="text" id="rn-${t.id}" placeholder="Nome do operador / turno"></div><div><label>Data</label><input type="date" id="rd-${t.id}" value="${new Date().toISOString().slice(0,10)}"></div></div><textarea id="rt-${t.id}" placeholder="Informe quem produziu, a causa e a ação corretiva..."></textarea><div class="btn-row"><button class="btn btn-sm btn-primary" onclick="responder('${t.id}')">Registrar resposta</button><button class="btn btn-sm btn-danger" onclick="encerrar('${t.id}')">Encerrar ticket</button></div></div></div>`;
+    return `<div class="ticket"><div class="ticket-head" onclick="toggleTicket('tb-${t.id}')"><div style="flex:1"><div class="ticket-id">${t.ticket_id} · Aberto por ${t.aberto_por} em ${t.data_abertura}</div><div class="ticket-title">${t.cliente} — Lote ${t.lote}</div><div class="ticket-meta"><span>📐 ${t.medida||'—'}</span><span>🧱 ${t.material||'—'}</span><span>🔄 ${t.turno||'—'}</span><span>🏭 Fab: ${t.data_fabricacao||'—'}</span><span>📦 ${t.quantidade} un.</span><span>💰 ${prej}</span></div></div><div class="ticket-right"><span class="badge ${badgeClass}">${badgeLabel}</span><span style="font-size:11px;color:var(--text-muted)">ver detalhes ▾</span></div></div><div class="ticket-body" id="tb-${t.id}"><div class="detail-section"><div class="detail-label">Descrição do defeito</div><div class="detail-text">${t.descricao}</div></div><div class="detail-section"><div class="detail-label">Fotos (${anexos.length})</div>${anexosHtml}</div>${respostaHtml}</div></div>`;
   }).join('');
 }
-
 function toggleTicket(id) { document.getElementById(id).classList.toggle('open'); }
-
-function openLightbox(url) {
-  document.getElementById('lightbox-img').src = url;
-  document.getElementById('lightbox').classList.add('open');
-}
+function openLightbox(src) { document.getElementById('lightbox-img').src = src; document.getElementById('lightbox').classList.add('open'); }
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
-
 async function responder(id) {
-  const nome = document.getElementById('rn-' + id).value.trim();
-  const texto = document.getElementById('rt-' + id).value.trim();
-  const data = document.getElementById('rd-' + id).value;
+  const nome = document.getElementById('rn-'+id).value.trim();
+  const texto = document.getElementById('rt-'+id).value.trim();
+  const data = document.getElementById('rd-'+id).value;
   if (!nome || !texto) { toast('Informe o responsável e a resposta.', 'erro'); return; }
   const { error } = await db.from('devolucoes').update({ responsavel_producao: nome, resposta_gerente: texto, data_resposta: data, status: 'Respondido' }).eq('id', id);
   if (error) { toast('Erro ao salvar resposta.', 'erro'); return; }
   toast('Resposta registrada!'); carregarTickets();
 }
-
 async function encerrar(id) {
   const { error } = await db.from('devolucoes').update({ status: 'Encerrado' }).eq('id', id);
   if (error) { toast('Erro ao encerrar.', 'erro'); return; }
   toast('Ticket encerrado.'); carregarTickets();
 }
-
 async function renderRelatorio() {
   const { data } = await db.from('devolucoes').select('*');
   const tickets = data || [];
   const total = tickets.length;
-  const prej = tickets.reduce((s, t) => s + Number(t.prejuizo || 0), 0);
-  const pecas = tickets.reduce((s, t) => s + Number(t.quantidade || 0), 0);
-  const respondidos = tickets.filter(t => t.status === 'Respondido' || t.status === 'Encerrado').length;
-  document.getElementById('metrics').innerHTML = `
-    <div class="metric"><div class="metric-label">Total de tickets</div><div class="metric-value">${total}</div></div>
-    <div class="metric"><div class="metric-label">Prejuízo total</div><div class="metric-value" style="font-size:20px">R$ ${prej.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div>
-    <div class="metric"><div class="metric-label">Peças devolvidas</div><div class="metric-value">${pecas.toLocaleString('pt-BR')}</div></div>
-    <div class="metric"><div class="metric-label">Respondidos</div><div class="metric-value">${respondidos}<span style="font-size:14px;color:var(--text-muted);font-weight:400"> / ${total}</span></div></div>
-  `;
+  const prej = tickets.reduce((s,t) => s + Number(t.prejuizo||0), 0);
+  const pecas = tickets.reduce((s,t) => s + Number(t.quantidade||0), 0);
+  const respondidos = tickets.filter(t => t.status==='Respondido'||t.status==='Encerrado').length;
+  document.getElementById('metrics').innerHTML = `<div class="metric"><div class="metric-label">Total de tickets</div><div class="metric-value">${total}</div></div><div class="metric"><div class="metric-label">Prejuízo total</div><div class="metric-value" style="font-size:20px">R$ ${prej.toLocaleString('pt-BR',{minimumFractionDigits:2})}</div></div><div class="metric"><div class="metric-label">Peças devolvidas</div><div class="metric-value">${pecas.toLocaleString('pt-BR')}</div></div><div class="metric"><div class="metric-label">Respondidos</div><div class="metric-value">${respondidos}<span style="font-size:14px;color:var(--text-muted);font-weight:400"> / ${total}</span></div></div>`;
   const porCliente = {};
   tickets.forEach(t => { porCliente[t.cliente] = (porCliente[t.cliente]||0) + Number(t.prejuizo||0); });
   const maxC = Math.max(...Object.values(porCliente), 1);
-  document.getElementById('chart-cliente').innerHTML = Object.keys(porCliente).length
-    ? Object.entries(porCliente).sort((a,b)=>b[1]-a[1]).map(([k,v]) =>
-        `<div class="chart-row"><div class="chart-info"><span>${k}</span><span style="font-weight:600">R$ ${v.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div><div class="chart-track"><div class="chart-fill" style="width:${Math.round(v/maxC*100)}%"></div></div></div>`).join('')
-    : '<div style="color:var(--text-muted);font-size:13px">Sem dados ainda.</div>';
+  document.getElementById('chart-cliente').innerHTML = Object.keys(porCliente).length ? Object.entries(porCliente).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `<div class="chart-row"><div class="chart-info"><span>${k}</span><span style="font-weight:600">R$ ${v.toLocaleString('pt-BR',{minimumFractionDigits:2})}</span></div><div class="chart-track"><div class="chart-fill" style="width:${Math.round(v/maxC*100)}%"></div></div></div>`).join('') : '<div style="color:var(--text-muted);font-size:13px">Sem dados ainda.</div>';
   const porMes = {};
-  tickets.forEach(t => { const m = (t.data_abertura||'').slice(0,7); if(m) porMes[m] = (porMes[m]||0)+1; });
+  tickets.forEach(t => { const m=(t.data_abertura||'').slice(0,7); if(m) porMes[m]=(porMes[m]||0)+1; });
   const maxM = Math.max(...Object.values(porMes), 1);
-  document.getElementById('chart-mes').innerHTML = Object.keys(porMes).length
-    ? Object.entries(porMes).sort().map(([k,v]) =>
-        `<div class="chart-row"><div class="chart-info"><span>${k}</span><span style="font-weight:600">${v} ticket${v>1?'s':''}</span></div><div class="chart-track"><div class="chart-fill" style="width:${Math.round(v/maxM*100)}%"></div></div></div>`).join('')
-    : '<div style="color:var(--text-muted);font-size:13px">Sem dados ainda.</div>';
+  document.getElementById('chart-mes').innerHTML = Object.keys(porMes).length ? Object.entries(porMes).sort().map(([k,v]) => `<div class="chart-row"><div class="chart-info"><span>${k}</span><span style="font-weight:600">${v} ticket${v>1?'s':''}</span></div><div class="chart-track"><div class="chart-fill" style="width:${Math.round(v/maxM*100)}%"></div></div></div>`).join('') : '<div style="color:var(--text-muted);font-size:13px">Sem dados ainda.</div>';
 }
 </script>
 </body>
